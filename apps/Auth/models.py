@@ -37,3 +37,4 @@ def delete_user(sender, instance=None, **kwargs):
         print("User does not exists")
     else:
         instance.user.delete()
+

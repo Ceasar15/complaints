@@ -50,4 +50,3 @@ class ProfileViewGet(generics.UpdateAPIView):
     queryset = Profile.objects
     lookup_field = 'user_id'
 
-

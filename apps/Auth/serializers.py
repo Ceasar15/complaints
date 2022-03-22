@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from apps.Auth.models import Profile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -51,3 +52,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['username'] = user.username
         return token
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fileds = [
+            "user", "gender", "city", "country", "state", "zip_code"
+        ]

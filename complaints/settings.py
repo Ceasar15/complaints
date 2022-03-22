@@ -74,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'complaints.wsgi.application'
 
-AUTH_USER_MODEL = 'Auth.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),

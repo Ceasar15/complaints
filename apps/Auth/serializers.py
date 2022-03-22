@@ -58,6 +58,31 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fileds = [
-            "user", "gender", "city", "country", "state", "zip_code"
+        fields = [
+            "user", "city", "country", "state", "zip_code"
         ]
+
+    def create(self, validated_data):
+        return Profile.objects.create(**validated_data)
+
+
+class ProfileSerializerGet(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            "user", "city", "country", "state", "zip_code"
+        ]
+
+    def update(self, instance, validated_data):
+        if 'user' in validated_data:
+            instance.user = validated_data['user']
+        if 'city' in validated_data:
+            instance.city = validated_data['city']
+        if 'country' in validated_data:
+            instance.country = validated_data['country']
+        if 'state' in validated_data:
+            instance.state = validated_data['state']
+        if 'zip_code' in validated_data:
+            instance.zip_code = validated_data['zip_code']
+        instance.save()
+        return instance

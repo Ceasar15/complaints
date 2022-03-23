@@ -23,6 +23,15 @@ class Profile(models.Model):
         return self.city
 
 
+class EmergencyContacts(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    state = models.CharField(max_length=120, blank=False)
+    phone_number = models.CharField(max_length=120, blank=False)
+
+    def __str__(self):
+        return self.user
+
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:

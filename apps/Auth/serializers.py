@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from apps.Auth.models import Profile
+from apps.Auth.models import Profile, EmergencyContacts
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -62,6 +62,10 @@ class ProfileSerializer(serializers.ModelSerializer):
             "user", "city", "country", "state", "zip_code"
         ]
 
+        extra_kwargs = {
+            'user': {'required': False}
+        }
+
     def create(self, validated_data):
         return Profile.objects.create(**validated_data)
 
@@ -72,6 +76,10 @@ class ProfileSerializerGet(serializers.ModelSerializer):
         fields = [
             "user", "city", "country", "state", "zip_code"
         ]
+
+        extra_kwargs = {
+                'user': {'required': False}
+         }
 
     def update(self, instance, validated_data):
         if 'user' in validated_data:
@@ -86,3 +94,19 @@ class ProfileSerializerGet(serializers.ModelSerializer):
             instance.zip_code = validated_data['zip_code']
         instance.save()
         return instance
+
+
+class EmergencyContactsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EmergencyContacts
+        fields = [
+            "user", "state", "phone_number"
+        ]
+
+        extra_kwargs = {
+            'user': {'required': False}
+        }
+
+    def create(self, validated_data):
+        return EmergencyContacts.objects.create(**validated_data)

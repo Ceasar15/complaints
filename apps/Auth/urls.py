@@ -1,5 +1,6 @@
 from django.urls import path
-from apps.Auth.views import MyObtainTokenPairView, RegisterView, ProfileViewPost, ProfileViewGet, EmergencyContactsView
+from apps.Auth.views import MyObtainTokenPairView, RegisterView, ProfileViewPost, ProfileViewGet, \
+    EmergencyContactsView, logout_view
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -9,5 +10,6 @@ urlpatterns = [
     path('profile-post/', ProfileViewPost.as_view(), name='profile'),
     path('profile-update/<int:user_id>', ProfileViewGet.as_view(), name='profile'),
     path('emergency-contacts/', EmergencyContactsView.as_view(), name='emergency_contacts'),
+    path('logout/', logout_view, name='logout'),
 
 ]

@@ -51,7 +51,7 @@ class ProfileViewPost(generics.CreateAPIView):
         return self.queryset.filter()
 
 
-class ProfileViewGet(generics.ListCreateAPIView):
+class ProfileViewGet(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializerGet
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
@@ -74,7 +74,7 @@ class EmergencyContactsView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
     def get_queryset(self):
-        return self.queryset.filter()
+        return self.queryset.filter(user=self.request.user)
 
 
 

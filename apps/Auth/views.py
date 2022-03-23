@@ -1,3 +1,5 @@
+from sqlite3 import IntegrityError
+
 from django.contrib.auth.models import User
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -45,7 +47,10 @@ class ProfileViewPost(generics.CreateAPIView):
     #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        try:
+            serializer.save(user=self.request.user)
+        except IntegrityError:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         return self.queryset.filter()
@@ -61,7 +66,7 @@ class ProfileViewGet(generics.RetrieveUpdateAPIView):
 
 def logout_view(request):
     logout(request)
-    return Response({'dd': 'ff'})
+    return ''
 
 
 class EmergencyContactsView(generics.ListCreateAPIView):

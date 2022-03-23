@@ -1,4 +1,4 @@
-# import django_heroku
+import django_heroku
 from pathlib import Path
 from datetime import timedelta
 import os
@@ -149,5 +149,6 @@ SIMPLE_JWT = {
 # SECURE_HSTS_SECONDS = 1000000
 # SECURE_FRAME_DENY = True
 
+
 # Activate Django-Heroku.
-# django_heroku.settings(locals())
+django_heroku.settings(locals())

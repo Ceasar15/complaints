@@ -26,34 +26,34 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class ProfileViewPost(generics.CreateAPIView):
+class ProfileViewPost(generics.ListCreateAPIView):
     queryset = Profile.objects
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
 
-    # def post(self, request, *args, **kwargs):
-    #     user = self.request.user
-    #     data = self.request.data
-    #     data._mutable = True
-    #     print("dsfs")
-    #     data['user'] = user.id
-    #     serializer = ProfileSerializer(data=self.request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(
-    #             serializer.data, status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def perform_create(self, serializer):
-        try:
-            serializer.save(user=self.request.user)
-        except IntegrityError:
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        data = self.request.data
+        data._mutable = True
+        print("dsfs")
+        data['user'] = user.id
+        serializer = ProfileSerializer(data=self.request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data, status=status.HTTP_201_CREATED)
+        else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get_queryset(self):
-        return self.queryset.filter()
+    # def perform_create(self, serializer):
+    #     try:
+    #         serializer.save(user=self.request.user)
+    #     except IntegrityError:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get_queryset(self):
+    #     return self.queryset.filter()
 
 
 class ProfileViewUpdate(generics.RetrieveUpdateAPIView):

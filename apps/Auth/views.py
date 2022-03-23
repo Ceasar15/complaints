@@ -56,12 +56,25 @@ class ProfileViewPost(generics.CreateAPIView):
         return self.queryset.filter()
 
 
-class ProfileViewGet(generics.RetrieveUpdateAPIView):
+class ProfileViewUpdate(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializerGet
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
     queryset = Profile.objects
     lookup_field = 'user_id'
+
+
+class ProfileViewGet(generics.ListAPIView):
+    serializer_class = ProfileSerializerGet
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    queryset = Profile.objects
+    pagination = False
+
+    def get_queryset(self):
+        owner = self.request.user
+        profile_owner = User.objects.get(username=owner)
+        return self.queryset.filter(user=profile_owner)
 
 
 def logout_view(request):

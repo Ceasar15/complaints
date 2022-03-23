@@ -20,7 +20,7 @@ class Profile(models.Model):
     zip_code = models.CharField(max_length=5, validators=[MinLengthValidator(5)], blank=False)
 
     def __str__(self):
-        return self.city
+        return self.user
 
 
 class EmergencyContacts(models.Model):

@@ -55,7 +55,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = [
@@ -71,10 +70,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializerGet(serializers.ModelSerializer):
+    user_id = serializers.CharField(source='user.id')
+
     class Meta:
         model = Profile
         fields = [
-            "user", "city", "country", "state", "zip_code"
+            "user", "city", "country", "state", "user_id", "zip_code"
         ]
 
         extra_kwargs = {

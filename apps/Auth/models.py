@@ -1,3 +1,5 @@
+from enum import auto
+
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -5,6 +7,18 @@ from django.conf import settings
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
+
+PRIMARY_REASON = (
+    ('UC', 'Unprofessional Conduct'),
+    ('VA', 'Verbal Abuse'),
+    ('PA', 'Physical Assault'),
+)
+
+RACE_OF_OFFICER = (
+    ('BL', 'Black/African'),
+    ('WH', 'White/European'),
+    ('AS', 'Asian'),
+)
 
 
 class Profile(models.Model):
@@ -30,6 +44,19 @@ class EmergencyContacts(models.Model):
 
     def __str__(self):
         return self.user
+
+
+class ComplaintsForm(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    police_department = models.CharField(max_length=255)
+    police_department_zip_code = models.CharField(max_length=255)
+    occured_time = models.DateTimeField(auto_now=True)
+    descriptions = models.TextField()
+    primary_reason = models.CharField(choices=PRIMARY_REASON, max_length=255)
+    race_of_officer = models.CharField(choices=RACE_OF_OFFICER, max_length=255)
+    phone_number = models.CharField(max_length=255)
+    upload_file = models.FileField(upload_to='complaint_upload_file')
+    were_you_arressted = models.BooleanField()
 
 
 # @receiver(post_save, sender=User)

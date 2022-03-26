@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from apps.Auth.models import Profile, EmergencyContacts
+from apps.Auth.models import Profile, EmergencyContacts, ComplaintsForm
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -124,3 +124,20 @@ class EmergencyContactsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return EmergencyContacts.objects.create(**validated_data)
+
+
+class ComplaintsFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComplaintsForm
+        fields = [
+            "user", "police_department", "police_department_zip_code",
+            "occured_time", "descriptions", "primary_reason", "race_of_officer",
+            "phone_number", "upload_file", "were_you_arressted",
+        ]
+
+        extra_kwargs = {
+            'user': {'required': False}
+        }
+
+    def create(self, validated_data):
+        return ComplaintsForm.objects.create(**validated_data)

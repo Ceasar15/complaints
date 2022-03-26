@@ -68,7 +68,7 @@ class ProfileViewGet(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
     queryset = Profile.objects
-    pagination = False
+    pagination_class = None
 
     def get_queryset(self):
         owner = self.request.user
@@ -86,6 +86,7 @@ class EmergencyContactsView(generics.ListCreateAPIView):
     serializer_class = EmergencyContactsSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
+    pagination_class = None
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

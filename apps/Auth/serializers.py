@@ -14,10 +14,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    city = serializers.CharField(write_only=True, required=True)
+    country = serializers.CharField(write_only=True, required=True)
+    state = serializers.CharField(write_only=True, required=True)
+    zip_code = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name',
+                  'city', 'country', 'state', 'zip_code')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -30,16 +35,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        print(2, validated_data)
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
             first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            last_name=validated_data['last_name'],
         )
-
+        profile = Profile.objects.create(
+            user=user,
+            city=validated_data['city'],
+            country=validated_data['country'],
+            state=validated_data['state'],
+            zip_code=validated_data['zip_code'],
+        )
         user.set_password(validated_data['password'])
         user.save()
-
         return user
 
 
@@ -70,17 +81,20 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializerGet(serializers.ModelSerializer):
-    user_id = serializers.CharField(source='user.id')
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    username = serializers.CharField(source='user.username')
 
     class Meta:
         model = Profile
         fields = [
-            "user", "city", "country", "state", "user_id", "zip_code"
+            "user", "city", "country", "state",
+            "first_name", "last_name", "username", "zip_code"
         ]
 
         extra_kwargs = {
-                'user': {'required': False}
-         }
+            'user': {'required': False}
+        }
 
     def update(self, instance, validated_data):
         if 'user' in validated_data:
@@ -98,7 +112,6 @@ class ProfileSerializerGet(serializers.ModelSerializer):
 
 
 class EmergencyContactsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = EmergencyContacts
         fields = [
